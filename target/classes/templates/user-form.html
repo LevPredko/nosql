@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Додати користувача</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Додати нового користувача</h1>
+    <form action="/user/save" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Ім'я</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Вік</label>
+            <input type="number" class="form-control" id="age" name="age" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Електронна пошта</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="interests" class="form-label">Інтереси (через кому)</label>
+            <input type="text" class="form-control" id="interests" name="interests" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+    </form>
+    <br>
+    <a href="/" class="btn btn-secondary">Назад</a>
+</div>
+</body>
+</html>
