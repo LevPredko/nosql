@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Перегляд користувача</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Деталі користувача</h1>
+    <div class="mb-3">
+        <strong>Ім'я:</strong> <span th:text="${user.name}">Іван</span>
+    </div>
+    <div class="mb-3">
+        <strong>Вік:</strong> <span th:text="${user.age}">21</span>
+    </div>
+    <div class="mb-3">
+        <strong>Електронна пошта:</strong> <span th:text="${user.email}">ivan@example.com</span>
+    </div>
+    <div class="mb-3">
+        <strong>Інтереси:</strong>
+        <ul>
+            <li th:each="interest : ${interestsList}" th:text="${interest}"></li>
+        </ul>
+    </div>
+    <h3>Дії:</h3>
+    <ul>
+        <li th:each="action : ${user.actions}">
+            <span th:text="${action.type}">view</span> -
+            <span th:text="${action.timestamp}">2025-05-08 12:00</span>
+        </li>
+    </ul>
+    <br>
+    <a href="/" class="btn btn-secondary">Назад</a>
+    <a th:href="@{/user/{id}/delete(id=${user.id})}" class="btn btn-danger">Видалити</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управління користувачами</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Управління користувачами</h1>
+    <hr>
+
+    <!-- Форма додавання користувача -->
+    <a href="/add" class="btn btn-primary mb-3">Додати користувача</a>
+
+    <h3>Список користувачів</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Ім'я</th>
+            <th>Вік</th>
+            <th>Інтереси</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.age}"></td>
+            <td th:text="${user.interests}"></td>
+            <td>
+                <a th:href="@{/user/{id}(id=${user.id})}" class="btn btn-info">Переглянути</a>
+                <a th:href="@{/user/{id}/delete(id=${user.id})}" class="btn btn-danger">Видалити</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
