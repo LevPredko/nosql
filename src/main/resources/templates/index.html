@@ -11,11 +11,31 @@
     <h1>Управління користувачами</h1>
     <hr>
 
-    <!-- Форма додавання користувача -->
-    <a href="/add" class="btn btn-primary mb-3">Додати користувача</a>
+    <!-- Кнопки управління -->
+    <div class="mb-3">
+        <a href="/add" class="btn btn-primary">Додати користувача</a>
+        <a href="/top-interests" class="btn btn-info">Топ-5 інтересів</a>
+    </div>
 
+    <!-- Форма фільтрації за інтересами -->
+    <form action="/filter" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="interest" class="form-control" placeholder="Введіть інтерес для фільтрації">
+            <button type="submit" class="btn btn-outline-secondary">Фільтрувати</button>
+        </div>
+    </form>
+
+    <!-- Повідомлення про фільтрацію -->
+    <div th:if="${filterInterest != null}" class="mb-3">
+        <h5>Фільтр застосовано: <span class="text-primary" th:text="${filterInterest}"></span></h5>
+        <a href="/" class="btn btn-sm btn-outline-dark">Скинути фільтр</a>
+    </div>
+
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!-- Таблиця користувачів -->
     <h3>Список користувачів</h3>
-    <table class="table">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>Ім'я</th>
@@ -30,8 +50,8 @@
             <td th:text="${user.age}"></td>
             <td th:text="${user.interests}"></td>
             <td>
-                <a th:href="@{/user/{id}(id=${user.id})}" class="btn btn-info">Переглянути</a>
-                <a th:href="@{/user/{id}/delete(id=${user.id})}" class="btn btn-danger">Видалити</a>
+                <a th:href="@{/user/{id}(id=${user.id})}" class="btn btn-info btn-sm">Переглянути</a>
+                <a th:href="@{/user/{id}/delete(id=${user.id})}" class="btn btn-danger btn-sm">Видалити</a>
             </td>
         </tr>
         </tbody>

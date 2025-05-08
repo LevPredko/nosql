@@ -7,10 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,7 +15,6 @@ public class UserController {
 
     private final UserService userService;
 
-    // Головна сторінка
     @GetMapping("/")
     public String index(Model model) {
         List<User> users = userService.getAllUsers();
@@ -26,22 +22,18 @@ public class UserController {
         return "index";
     }
 
-    // Форма додавання користувача
     @GetMapping("/add")
     public String addUserForm() {
         return "user-form";
     }
 
-    // Збереження користувача
     @PostMapping("/user/save")
     public String saveUser(@RequestParam String name,
                            @RequestParam int age,
                            @RequestParam String email,  // Додаємо параметр для email
                            @RequestParam String interests) {
-        // Перевірка чи користувач з такою поштою вже існує
         Optional<User> existingUser = userService.getUserByEmail(email);
         if (existingUser.isPresent()) {
-            // Якщо такий користувач є, перенаправляємо назад з повідомленням про помилку
             return "redirect:/add?error=emailExists";
         }
 
@@ -51,25 +43,50 @@ public class UserController {
         return "redirect:/";
     }
 
-    // Видалення користувача
     @GetMapping("/user/{id}/delete")
     public String deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return "redirect:/";
     }
 
-    // Перегляд конкретного користувача
     @GetMapping("/user/{id}")
     public String getUser(@PathVariable String id, Model model) {
         Optional<User> user = userService.getUserById(id);
         if (user.isPresent()) {
-            // Перетворюємо масив інтересів в список
             List<String> interestsList = user.get().getInterests();
             model.addAttribute("user", user.get());
-            model.addAttribute("interestsList", interestsList);  // Передаємо список інтересів в шаблон
-            return "user-details";  // Можна створити шаблон для деталей користувача
+            model.addAttribute("interestsList", interestsList);
+            return "user-details";
         } else {
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/filter")
+    public String filterUsersByInterest(@RequestParam(required = false) String interest, Model model) {
+        if (interest == null || interest.trim().length() < 2) {
+            model.addAttribute("error", "Інтерес має містити щонайменше 2 символи.");
+            model.addAttribute("users", userService.getAllUsers());
+            model.addAttribute("filterInterest", "");
+        } else {
+            List<User> filteredUsers = userService.findByInterest(interest);
+            model.addAttribute("users", filteredUsers);
+            model.addAttribute("filterInterest", interest);
+        }
+        return "index";
+    }
+
+
+    @GetMapping("/top-interests")
+    public String topInterests(Model model) {
+        Map<String, Long> topInterests = userService.getTopInterests(5);
+        model.addAttribute("topInterests", topInterests);
+        return "top-interests";
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleIllegalArgument(IllegalArgumentException ex, Model model) {
+        model.addAttribute("error", ex.getMessage());
+        return "index";
     }
 }
